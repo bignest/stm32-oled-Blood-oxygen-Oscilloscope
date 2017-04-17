@@ -35,9 +35,8 @@
 #include "stm32f1xx_hal.h"
 #include "adc.h"
 #include "i2c.h"
-#include "tim.h"
 #include "usart.h"
-#include "gpio.h"
+
 
 /* USER CODE BEGIN Includes */
 #include "fonts.h"
@@ -72,15 +71,7 @@ void Error_Handler(void);
   * @param GPIO_Pin: Specifies the pins connected EXTI line
   * @retval None
   */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  if(GPIO_Pin == GPIO_PIN_1)
-  {
-      i=0;
-		//b++;
-		// HAL_Delay(10);
-  }  
-}
+
 
 
 /* USER CODE END 4 */
@@ -120,27 +111,23 @@ int main(void)
 
   while (1)
   {
-		 i = TIM1->CNT;  
+
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-		int x,y,x1,y1,AD_Value;
+int x,y,x1,y1,AD_Value;
+x1=x=0;
   for(x = 0;x < 127;x++)
-{          HAL_ADC_Start(&hadc1);
+{  HAL_ADC_Start(&hadc1);
     HAL_ADC_PollForConversion(&hadc1, 50);
-                if(HAL_IS_BIT_SET(HAL_ADC_GetState(&hadc1), HAL_ADC_STATE_REG_EOC))
+   if(HAL_IS_BIT_SET(HAL_ADC_GetState(&hadc1), HAL_ADC_STATE_REG_EOC))
     { AD_Value = HAL_ADC_GetValue(&hadc1);
         y=65-(AD_Value/90);
-                        SSD1306_DrawLine(x1,y1,x,y,1);
-                //SSD1306_DrawPixel(x,AD_Value/127, 1);  
+        SSD1306_DrawLine(x,y,x1,y1,1);
+      SSD1306_UpdateScreen(); 
     x1=x;
-    y1=y;                                
-                 SSD1306_UpdateScreen();
-        // HAL_Delay(6);  //????
-                }
-}
-    SSD1306_Fill(0);  
-    y=x1=0;
+    y1=y;                       
+
 
   /* USER CODE BEGIN 3 */
 
